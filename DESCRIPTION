@@ -1,0 +1,20 @@
+Package: pepo
+Type: Package
+Title: Estimate the Relative Probabilities of Hemiplasy and Homoplasy on a Phylogeny
+Version: 0.1.0
+Author: Rafael Guerrero
+Maintainer: Rafael Guerrero <rafguerr@indiana.edu>
+Description: P(e):P(o) is a minimal package that implements methods to calculate 
+    the probabilities of hemiplasy (trait evolution incongruent with species tree due to incomplete
+    lineage sorting) and homoplasy (incongruent traits due to convergent mutations). In this first version, the
+    package includes functions to estimate and plot the Hemiplasy Risk Factor (HRF) of all branches on a phylogeny, 
+    provided a tree is in coalescent units and a mutation rate.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+  tidyverse,
+  ape,
+  phylobase
+Suggests:
+  phylo4d
