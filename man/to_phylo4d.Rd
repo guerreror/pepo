@@ -7,10 +7,12 @@
 to_phylo4d(tree, df)
 }
 \arguments{
-\item{df}{}
+\item{tree}{an object of class "phylo"}
+
+\item{df}{accesory data to be added}
 }
 \value{
-a phylo4 tree
+an object of class phylo4
 }
 \description{
 Convert to 'phylo4' class

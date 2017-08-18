@@ -1,0 +1,38 @@
+---
+title: "Hemiplasy Risk Factor for a phylogeny"
+author: "Rafael F. Guerrero"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r}
+
+data("tomato")
+#tomatompred$edge.length[mpred$edge.length==9] <- 1
+#mpred$edge.length[mpred$edge.length==16] <- 4
+
+mpBL <- prep_branch_lengths(tomato) 
+mpBL <- tree_hrf(mpBL, mutation = 0.01)
+
+```
+
+
+```{r}
+##with ggtree
+library(ggtree, quietly=T)
+solgg <-to_treedata(tomato, mpBL)
+
+ggtree(solgg, aes(color=hrf), size=2)+geom_tiplab(color='black')+
+  scale_color_gradient2(low = "darkblue", mid = "yellow", high="red", midpoint=1, na.value="grey80")+
+  theme(legend.position = c(.05, .85))
+```
+
+```{r}
+p4 <- to_phylo4d(tomato, mpBL)
+```
+

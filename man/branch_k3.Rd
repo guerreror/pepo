@@ -2,22 +2,24 @@
 % Please edit documentation in R/mutation_functions.R
 \name{branch_k3}
 \alias{branch_k3}
-\title{Calculate the length of a branch that ends in a population where three samples coalesce}
+\title{Calculate branch lengths in genealogy that involves ILS}
 \usage{
 branch_k3(t0 = 0, tm = Inf, branch = "avg")
 }
 \arguments{
-\item{t0}{time to ancestor, or time to speciation event (i.e., a constant branch length, in coalescent units)}
+\item{t0}{Numeric. Time at start of coalescent process (i.e., constant length to be added to terminal branches; in coal units)}
 
-\item{tm}{maximum time to coalescence (ancestral branch length)}
+\item{tm}{Numberic. Maximum time to coalescence (ABC ancestor branch length)}
 
-\item{branch}{specifies if the time to the first ('short'), second ('long'), internal ('inter'), ancestral ('anc'), mean ('avg') coalescent event.}
+\item{branch}{String. Branch to be returned: first ('short') or second ('long') coalescent events, mean of those two ('avg'), internal ('inter'), or ancestral branch ('anc').}
 }
 \value{
 Numeric, the probability of at least one mutation.
 }
 \description{
-Calculate the length of a branch that ends in a population where three samples coalesce
+Estimates average length of any branch in the genealogy of the sample (a,b,c), given that
+the species tree is ((A,B),C) and there was no coalescence of the (a,b) sample in the AB ancestral species.
+In other words, coalescence of the three samples (a,b,c) happens in the ABC ancestor.
 }
 \examples{
 branch_k3(1, 10, 'short')

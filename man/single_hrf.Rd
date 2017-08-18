@@ -8,17 +8,17 @@ single_hrf(this_branch, descendants, ancestor, sibling, mutation_rate,
   model = "standard")
 }
 \arguments{
-\item{this_branch}{Branch length of focal internal branch.}
+\item{this_branch}{Numeric. Branch length of focal internal branch.}
 
 \item{descendants}{Numeric vector of size 2. Lengths of branches descending from focal branch.}
 
-\item{ancestor}{Length of ancestral branch (the ABC ancestor)}
+\item{ancestor}{Numeric. Length of ancestral branch (the ABC ancestor)}
 
-\item{sibling}{Length of sibling branch (leading to tip node C).}
+\item{sibling}{Numeric. Length of sibling branch (leading to tip node C).}
 
-\item{mutation_rate}{Population-wide mutation rate}
+\item{mutation_rate}{Numeric. Population-wide mutation rate}
 
-\item{model}{One of three values: "minimal" assumes no back-mutation, so the probability of observing}
+\item{model}{String. One of the three models implemented: "standard" (default), "minimal", or "strict".}
 }
 \value{
 Numeric, a ratio
@@ -27,8 +27,14 @@ Numeric, a ratio
 It assumes:
 no uncertainty on species tree ((A,B),C), one sample per species, branch lengths in coalescent units.
 
-It calls \code{pr_homoplasy()} and \code{pr_hemiplasy()} for the given values. If \code{both_sides == TRUE}
-(default), it calculates probabilities for two incongruencies: when A and C share the derived state, and when
-B and C share the derived state. Otherwise, it only calculates the first case (it assumes that the
-first value in the \code{descendants} vector is A.
+Calls \code{pr_homoplasy()} and \code{pr_hemiplasy()} for the given values. If \code{both_sides == TRUE}
+(default), the total probability of each scenario is the sum of probabilities for two incongruencies:
+when A and C share the derived state, and when B and C share the derived state.
+Otherwise, it only calculates the first case (assuming the first value in the
+\code{descendants} vector as A).
+
+See documentation for tree_hrf() for description of the three models implemented.
+}
+\seealso{
+\code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{tree_hrf}}
 }

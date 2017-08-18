@@ -23,7 +23,7 @@ NULL
 #' @param mode String. One of the three models implemented: "standard" (default), "minimal", or "strict".
 #'
 #' @return Numeric, a probability
-#' @seealso pr_homoplasy, single_hrf, tree_hrf
+#' @seealso \code{\link{pr_homoplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
 #'
 pr_hemiplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode= "standard") {
 
@@ -59,7 +59,7 @@ pr_hemiplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode= "standar
 #' @inheritParams pr_hemiplasy
 #'
 #' @return Numeric, a probability
-#' @seealso pr_hemiplasy, single_hrf, tree_hrf
+#' @seealso \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
 #'
 pr_homoplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standard") {
 
@@ -100,7 +100,7 @@ pr_homoplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standa
 #' @param model String. One of the three models implemented: "standard" (default), "minimal", or "strict".
 #'
 #' @return Numeric, a ratio
-#' @seealso pr_hemiplasy, pr_homoplasy, tree_hrf
+#' @seealso \code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{tree_hrf}}
 single_hrf <- function(this_branch, descendants, ancestor, sibling, mutation_rate, model = "standard") {
     if (length(descendants) != 2) return(NA) # this branch doesn't have two descendants, HRF can't be computed
     if (is.na(this_branch)) return(NA) # this branch doesn't have a positive length. Happens at root. No HRF calculated.

@@ -1,18 +1,19 @@
-#' Phylogeny of 36 nightshade accessions
+#' Phylogeny of 36 nightshade accessions.
 #'
-#' An object containing the tree of 36 accessions, from 12 species,
-#' of the genus Solanum (sect Lycopersicon).
-#' This tree is a reduced version of the "Best likelihood coalescent-based phylogeny from
-#' 100 replicates of MP-EST using 100 kb genome window trees." reported by Pease et al 2016 (PLoS Biology)
-#' diamonds.
+#' An object containing the tree of 36 accessions from 12
+#' species of the genus Solanum (sect Lycopersicon).
+#' This tree is a reduced version of the "Best likelihood
+#' coalescent-based phylogeny from 100 replicates of
+#' MP-EST using 100 kb genome window trees." reported by
+#' Pease et al 2016 (PLoS Biology)
 #'
-#' @format A list (class 'phylo') of 5 variables:
+#' @format A list of class phylo, with 5 variables:
 #' \describe{
-#'   \item{edge}{branch identifier, an integer vector 36x2}
+#'   \item{edge}{branch identifier, an int vector 36x2}
 #'   \item{Nnode}{Number of nodes, integer}
-#'   \item{tip.label}{Species codes, as used in original paper}
-#'   \item{edge.length}{Branch length, in coalescent units}
-#'   \item{root.edge}
+#'   \item{tip.label}{Species codes, as in original paper}
+#'   \item{edge.length}{Branch length, in coal units}
+#'   \item{root.edge}{}
 #' }
 #' @source \url{http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002379}
 "tomato"

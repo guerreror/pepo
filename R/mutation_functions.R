@@ -73,7 +73,7 @@ branch_k3 <- function(t0 = 0, tm = Inf, branch = "avg") {
 #' @param where String. "ac" or "banc".
 #'
 #' @return Numeric. Probability
-#' @seealso homoplasy_mutations()
+#' @seealso \code{\link{homoplasy_mutations}}
 pr_double_hit <- function(mu_list, where) {
   out <- NA
   if (where == "ac") out <-  mu_list$a * mu_list$c * (1 - mu_list$anc) * (1 - mu_list$b) * (1 - mu_list$ab)

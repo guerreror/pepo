@@ -7,11 +7,11 @@
 prep_branch_lengths(tree)
 }
 \arguments{
-\item{tree}{}
+\item{tree}{a phylogeny of class 'phylo'}
 }
 \value{
-a dplyr::data_frame
+an object of class tbl or data_frame
 }
 \description{
-Prepare branches for HRF calculation
+Takes a 'phylo' object and extracts the relevant branches for each HRF calculation.
 }

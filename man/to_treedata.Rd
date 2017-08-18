@@ -7,10 +7,12 @@
 to_treedata(tree, df)
 }
 \arguments{
-\item{df}{}
+\item{tree}{an object of class "phylo"}
+
+\item{df}{accesory data to be added}
 }
 \value{
-a treedata object
+an object of class treedata
 }
 \description{
 Convert to 'treedata' structure

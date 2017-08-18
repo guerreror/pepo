@@ -7,9 +7,9 @@
 branch_k2(t0 = 0, tm = Inf)
 }
 \arguments{
-\item{t0}{time to beginning of ancestral lineage (i.e., a constant branch length to add) in coalescent units}
+\item{t0}{Numeric. Time at start of coalescent process (i.e., constant length to be added to terminal branches; in coal units)}
 
-\item{tm}{maximum time to coalescence (total time of ancestral lineage) in coalescent units}
+\item{tm}{Numberic. Maximum time to coalescence (ABC ancestor branch length)}
 }
 \value{
 Numeric, a branch length in coalescent units

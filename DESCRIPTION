@@ -20,12 +20,15 @@ Imports:
     phylobase
 Suggests:
     ggplot2,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
-Collate: 
+Collate:
     'data.R'
     'mutation_functions.R'
     'hrf_functions.R'
     'hrf_on_trees.R'
     'mini_utilities.R'
     'pepo.R'
+VignetteBuilder: knitr

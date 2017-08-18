@@ -19,7 +19,7 @@ pr_homoplasy(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standard")
 
 \item{mu_rate}{Population-wide mutation rate}
 
-\item{mode}{One of three values: "minimal" assumes no back-mutation, so the probability of observing}
+\item{mode}{String. One of the three models implemented: "standard" (default), "minimal", or "strict".}
 }
 \value{
 Numeric, a probability
@@ -33,4 +33,9 @@ Roughly, it computes the product of the probabilities of events necessary for th
 incongruence. Specifically, mutations along the A and C branches (implying no mutations
 in other branches) or --depending on \code{mode}- mutations along the ABC ancestor and B
 (again, no other mutations).
+
+See documentation of tree_hrf() for description of the three models implemented.
+}
+\seealso{
+\code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
 }

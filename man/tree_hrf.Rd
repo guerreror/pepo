@@ -7,11 +7,19 @@
 tree_hrf(edges, mutation = 0.01, mode = "standard")
 }
 \arguments{
-\item{mode}{}
+\item{edges}{a tbl (or data_frame)}
+
+\item{mutation}{numeric, population-wide mutation rate}
+
+\item{mode}{string}
 }
 \value{
-a dplyr::data_frame
+an object of class tbl or data_frame
 }
 \description{
-Calculate HRF for all branches on a tree
+It assumes:
+no uncertainty on species tree ((A,B),C), one sample per species, branch lengths in coalescent units.
+}
+\seealso{
+\code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}
 }
