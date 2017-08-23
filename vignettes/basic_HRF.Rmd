@@ -8,31 +8,43 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+#The P(e):P(o) package
+This is the alpha release of `pepo`, an R package to calculate the hemiplasy risk factor (HRF) on a phylogeny. This packages depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse` package (loaded below). 
 
-
-```{r}
-
-data("tomato")
-#tomatompred$edge.length[mpred$edge.length==9] <- 1
-#mpred$edge.length[mpred$edge.length==16] <- 4
-
-mpBL <- prep_branch_lengths(tomato) 
-mpBL <- tree_hrf(mpBL, mutation = 0.01)
-
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+library(tidyverse)
+library(pepo)
 ```
 
+In this example, we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package). 
 
-```{r}
-##with ggtree
+```{r, echo=TRUE}
+data("tomato")
+class(tomato)
+```
+
+## Minimal example
+The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (or `data_frame`) with variables that will be needed by the latter.
+
+```{r, echo = TRUE}
+tomato_branches <- prep_branch_lengths(tomato) 
+tomato_branches
+```
+
+Then we can call `tree_hrf` on that data frame. The function will return the original data frame plus a new variable, `hrf`. This function assumes branch lengths are **in coalescent units** (e.g., calculated in MP-EST). The call below will assume the default population-wide mutation rate (0.01).
+
+```{r, echo = TRUE}
+tomato_hrf <- tree_hrf(tomato_branches)
+tomato_hrf
+```
+
+That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. `pepo` includes the `to_treedata` function to convert our data frame and `phylo` tree into a `ggtree`-compatible object.
+
+```{r, error=FALSE, message=F, warning=F}
 library(ggtree, quietly=T)
-solgg <-to_treedata(tomato, mpBL)
+solgg <- to_treedata(tomato, tomato_hrf)
 
 ggtree(solgg, aes(color=hrf), size=2)+geom_tiplab(color='black')+
   scale_color_gradient2(low = "darkblue", mid = "yellow", high="red", midpoint=1, na.value="grey80")+
   theme(legend.position = c(.05, .85))
 ```
-
-```{r}
-p4 <- to_phylo4d(tomato, mpBL)
-```
-
