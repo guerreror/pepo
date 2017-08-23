@@ -26,7 +26,7 @@ class(tomato)
 Minimal example
 ---------------
 
-The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (or `data_frame`) with variables that will be needed by the latter.
+The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (a `data_frame` from the tidyverse) with variables that will be needed by the latter.
 
 ``` r
 tomato_branches <- prep_branch_lengths(tomato) 
@@ -47,7 +47,7 @@ tomato_branches
 #> # ... with 26 more rows
 ```
 
-Then we can call `tree_hrf` on that data frame. The function will return the original data frame plus a new variable, `hrf`. This function assumes branch lengths are **in coalescent units** (e.g., calculated in MP-EST). The call below will assume the default population-wide mutation rate (0.01).
+Then we can call `tree_hrf()` on that tibble. The function will return the original data frame plus a new variable, `hrf`. This function assumes branch lengths are **in coalescent units** (e.g., calculated in MP-EST). The call below will assume the default population-wide mutation rate (0.01).
 
 ``` r
 tomato_hrf <- tree_hrf(tomato_branches)
@@ -68,13 +68,16 @@ tomato_hrf
 #> # ... with 26 more rows
 ```
 
-That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. `pepo` includes the `to_treedata` function to convert our data frame and `phylo` tree into a `ggtree`-compatible object.
+Some `NA` values in the `hrf` column are normal: the function does not calculate HRF for tips or ancestral branches. This is because the HRF is a property of a branch that has: 1) two descendant lineages, 2) a sister lineage, and 3) an ancestral branch with known length.
+
+That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. `pepo` includes the `to_treedata()` function to convert our data frame and `phylo` tree into a `ggtree`-compatible object.
 
 ``` r
-library(ggtree, quietly=T)
+library(ggtree)
 solgg <- to_treedata(tomato, tomato_hrf)
 
-ggtree(solgg, aes(color=hrf), size=2)+geom_tiplab(color='black')+
+ggtree(solgg, aes(color=hrf), size=2) + 
+  geom_tiplab(color='black') +
   scale_color_gradient2(low = "darkblue", mid = "yellow", high="red", midpoint=1, na.value="grey80")+
   theme(legend.position = c(.05, .85))
 ```
