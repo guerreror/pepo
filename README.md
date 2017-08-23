@@ -3,7 +3,7 @@
 The P(e):P(o) package
 =====================
 
-This is the alpha release of `pepo`, an R package to calculate the hemiplasy risk factor (HRF) on a phylogeny. This packages depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse` package (loaded below).
+This is the alpha release of `pepo`, an R package to calculate the hemiplasy risk factor (HRF) on a phylogeny. This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse` (loaded below).
 
 Installation
 ------------
