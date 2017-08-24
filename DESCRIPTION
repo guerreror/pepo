@@ -17,7 +17,8 @@ Imports:
     purrr,
     dplyr,
     ape,
-    phylobase
+    phylobase,
+    treeio
 Suggests:
     ggplot2,
     testthat,

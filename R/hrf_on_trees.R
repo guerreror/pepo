@@ -80,8 +80,9 @@ to_phylo4d <- function(tree, df) {
   phylobase::phylo4d(tree, all.data = legacy_df)
 }
 
-#' Convert to 'treedata' structure
-#'
+#' Convert to 'treedata'
+#' @description Take a data frame and 'phylo' object and turn them into
+#' a 'treedata' object (from 'treeio' package)
 #' @param tree an object of class "phylo"
 #' @param df accesory data to be added
 #'
@@ -89,6 +90,10 @@ to_phylo4d <- function(tree, df) {
 #' @export
 #'
 to_treedata <- function(tree, df) {
+  if(!requireNamespace('treeio', quietly = TRUE)) {
+    message("The to_treedata() function needs the 'treeio' packaged. Please install it.")
+    return(NA)
+  }
   ph <- ape::as.phylo(tree)
   dfout <- dplyr::mutate(df, node = to)
   new("treedata", phylo = ph, data = dfout)

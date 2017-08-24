@@ -31,7 +31,7 @@ class(tomato)
 ```
 
 ## Minimal example
-The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (a `data_frame` from the tidyverse) with variables that will be needed by the latter.
+The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (a tidy data frame) with variables that will be needed by the latter.
 
 ```{r, echo = TRUE}
 tomato_branches <- prep_branch_lengths(tomato) 
