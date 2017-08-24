@@ -1,7 +1,7 @@
 Package: pepo
 Type: Package
 Title: Estimate Hemiplasy and Homoplasy on a Phylogeny
-Version: 0.1.0
+Version: 0.1.1
 Author: Rafael Guerrero
 Maintainer: Rafael Guerrero <rafguerr@indiana.edu>
 Description: P(e):P(o) is a minimal package that implements methods to calculate 
@@ -17,13 +17,14 @@ Imports:
     purrr,
     dplyr,
     ape,
-    phylobase,
-    treeio
+    phylobase
 Suggests:
     ggplot2,
     testthat,
     knitr,
     rmarkdown
+Remotes:
+    bioc::3.5/release/treeio
 RoxygenNote: 6.0.1
 Collate:
     'data.R'

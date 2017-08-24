@@ -14,7 +14,7 @@ tree_hrf(edges, mutation = 0.01, mode = "standard")
 \item{mode}{string}
 }
 \value{
-an object of class tbl or data_frame
+a tibble
 }
 \description{
 It assumes:

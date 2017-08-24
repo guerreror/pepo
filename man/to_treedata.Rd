@@ -2,7 +2,7 @@
 % Please edit documentation in R/hrf_on_trees.R
 \name{to_treedata}
 \alias{to_treedata}
-\title{Convert to 'treedata' structure}
+\title{Convert to 'treedata'}
 \usage{
 to_treedata(tree, df)
 }
@@ -15,5 +15,6 @@ to_treedata(tree, df)
 an object of class treedata
 }
 \description{
-Convert to 'treedata' structure
+Take a data frame and 'phylo' object and turn them into
+a 'treedata' object (from 'treeio' package)
 }

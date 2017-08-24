@@ -4,13 +4,13 @@
 \alias{prep_branch_lengths}
 \title{Prepare branches for HRF calculation}
 \usage{
-prep_branch_lengths(tree)
+prep_branch_lengths(tree, tip_replace = NULL)
 }
 \arguments{
 \item{tree}{a phylogeny of class 'phylo'}
 }
 \value{
-an object of class tbl or data_frame
+a tibble
 }
 \description{
 Takes a 'phylo' object and extracts the relevant branches for each HRF calculation.

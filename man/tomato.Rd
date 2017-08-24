@@ -11,7 +11,6 @@
   \item{tip.label}{Species codes, as in original paper}
   \item{edge.length}{Branch length, in coal units}
   \item{root.edge}{}
-  ...
 }}
 \source{
 \url{http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002379}

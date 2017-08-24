@@ -3,10 +3,12 @@
 The P(e):P(o) package
 =====================
 
-This is the alpha release of `pepo`, an R package to calculate the hemiplasy risk factor (HRF) on a phylogeny. This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse` (loaded below).
+This is the alpha release of `pepo`, a minimal package to calculate the probabilities of hemiplasy (trait evolution incongruent with species tree due to incomplete lineage sorting) and homoplasy (incongruent traits due to convergent mutations). Currently, the package includes functions to estimate the ratio of these two probabilities, which we call the Hemiplasy Risk Factor (HRF), for all branches on a phylogeny. Provided a tree, branch lengths and population-wide mutation rate in coalescent units (2N), the HRF will give an intuition for the relative importance of hemiplasy in the evolution of a particular clade.
 
 Installation
 ------------
+
+This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse`.
 
 Install `pepo` from github with: `devtools::install_github("guerreror/pepo")`.
 
@@ -15,7 +17,10 @@ library(tidyverse)
 library(pepo)
 ```
 
-In this example, we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
+Quick example
+-------------
+
+In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
 
 ``` r
 data("tomato")
@@ -23,13 +28,11 @@ class(tomato)
 #> [1] "phylo"
 ```
 
-Minimal example
----------------
-
-The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (a `data_frame` from the tidyverse) with variables that will be needed by the latter.
+The two functions you'll need from `pepo` are: `prep_branch_lengths()` and `tree_hrf()`. The former returns a tibble (a tidy data frame) with variables that will be needed by the latter.
 
 ``` r
 tomato_branches <- prep_branch_lengths(tomato) 
+#> logical(0)
 tomato_branches
 #> # A tibble: 36 x 7
 #>     code  from    to this_branch descendants ancestor sibling
@@ -70,7 +73,7 @@ tomato_hrf
 
 Some `NA` values in the `hrf` column are normal: the function does not calculate HRF for tips or ancestral branches. This is because the HRF is a property of a branch that has: 1) two descendant lineages, 2) a sister lineage, and 3) an ancestral branch with known length.
 
-That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. `pepo` includes the `to_treedata()` function to convert our data frame and `phylo` tree into a `ggtree`-compatible object.
+That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. The `to_treedata()` function converts our HRF tibble and `phylo` tree into a `ggtree`-compatible object (which allows for easy plotting).
 
 ``` r
 library(ggtree)
