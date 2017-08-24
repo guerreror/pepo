@@ -61,25 +61,6 @@ tree_hrf <- function(edges, mutation = 0.01, mode = "standard") {
                 hrf = purrr::pmap_dbl(list(this_branch, descendants, ancestor, sibling), single_hrf, mutation_rate = mutation, model = mode))
 }
 
-#' Convert to 'phylo4' class
-#'
-#' @inheritParams to_treedata
-#'
-#' @return an object of class phylo4
-#' @export
-#'
-to_phylo4d <- function(tree, df) {
-
-  earliest <- dplyr::filter(df, is.na(ancestor))
-  edgeno <- dplyr::slice(earliest, 1)
-  anc_node <- dplyr::data_frame(code = paste("0", edgeno$from, sep = "-"), to = edgeno$from, this_branch = Inf, descendants = list(earliest$this_branch), hrf = 0)
-  new_df <- dplyr::bind_rows(df, anc_node)
-  legacy_df <- as.data.frame(new_df)
-  rownames(legacy_df) <- new_df$to
-
-  phylobase::phylo4d(tree, all.data = legacy_df)
-}
-
 #' Convert to 'treedata'
 #' @description Take a data frame and 'phylo' object and turn them into
 #' a 'treedata' object (from 'treeio' package)
@@ -97,5 +78,24 @@ to_treedata <- function(tree, df) {
   ph <- ape::as.phylo(tree)
   dfout <- dplyr::mutate(df, node = to)
   new("treedata", phylo = ph, data = dfout)
+}
+
+#' Convert to 'phylo4' class
+#'
+#' @inheritParams to_treedata
+#'
+#' @return an object of class phylo4
+#' @export
+#'
+to_phylo4d <- function(tree, df) {
+
+  earliest <- dplyr::filter(df, is.na(ancestor))
+  edgeno <- dplyr::slice(earliest, 1)
+  anc_node <- dplyr::data_frame(code = paste("0", edgeno$from, sep = "-"), to = edgeno$from, this_branch = Inf, descendants = list(earliest$this_branch), hrf = 0)
+  new_df <- dplyr::bind_rows(df, anc_node)
+  legacy_df <- as.data.frame(new_df)
+  rownames(legacy_df) <- new_df$to
+
+  phylobase::phylo4d(tree, all.data = legacy_df)
 }
 

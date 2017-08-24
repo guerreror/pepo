@@ -24,6 +24,8 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
+Remotes:
+    bioc::3.5/release/treeio
 RoxygenNote: 6.0.1
 Collate:
     'data.R'
