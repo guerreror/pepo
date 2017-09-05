@@ -161,7 +161,11 @@ to_treedata <- function(tree, df) {
   new("treedata", phylo = ph, data = dfout)
 }
 
+<<<<<<< HEAD
 #' Convert to 'phylo4d' class
+=======
+#' Convert to 'phylo4' class
+>>>>>>> origin/master
 #'
 #' @inheritParams to_treedata
 #'
