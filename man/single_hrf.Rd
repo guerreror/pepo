@@ -5,7 +5,7 @@
 \title{Ratio of hemiplasy to homoplasy in a three-species clade.}
 \usage{
 single_hrf(this_branch, descendants, ancestor, sibling, mutation_rate,
-  model = "standard")
+  model = "standard", pepo = F)
 }
 \arguments{
 \item{this_branch}{Numeric. Branch length of focal internal branch.}

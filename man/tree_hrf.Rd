@@ -4,7 +4,7 @@
 \alias{tree_hrf}
 \title{Calculate HRF for all branches on a tree}
 \usage{
-tree_hrf(edges, mutation = 0.01, mode = "standard")
+tree_hrf(edges, mutation = 0.01, mode = "standard", pepo = F)
 }
 \arguments{
 \item{edges}{a tbl (or data_frame)}

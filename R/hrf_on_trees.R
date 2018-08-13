@@ -131,7 +131,7 @@ prep_branch_lengths <- function(tree, tip_replace = NULL) {
 #' @export
 #' @seealso \code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}
 #'
-tree_hrf <- function(edges, mutation = 0.01, mode = "standard") {
+tree_hrf <- function(edges, mutation = 0.01, mode = "standard", pepo=F) {
   model_avail <- c("standard", "minimal", "strict")
   if(!mode %in% model_avail) warning(paste("Requested model", mode,"in tree_hrf() not recognized."))
 
@@ -139,7 +139,7 @@ tree_hrf <- function(edges, mutation = 0.01, mode = "standard") {
     warning("At least one variable is missing in the 'edges' data frame. You might need to run prep_branch_lengths() first.")
   }
   dplyr::mutate(edges,
-                hrf = purrr::pmap_dbl(list(this_branch, descendants, ancestor, sibling), single_hrf, mutation_rate = mutation, model = mode))
+                hrf = purrr::pmap_dbl(list(this_branch, descendants, ancestor, sibling), single_hrf, mutation_rate = mutation, model = mode, pepo=pepo))
 }
 
 #' Convert to 'treedata'
@@ -161,11 +161,7 @@ to_treedata <- function(tree, df) {
   new("treedata", phylo = ph, data = dfout)
 }
 
-<<<<<<< HEAD
-#' Convert to 'phylo4d' class
-=======
 #' Convert to 'phylo4' class
->>>>>>> origin/master
 #'
 #' @inheritParams to_treedata
 #'
@@ -183,4 +179,3 @@ to_phylo4d <- function(tree, df) {
 
   phylobase::phylo4d(tree, all.data = legacy_df)
 }
-

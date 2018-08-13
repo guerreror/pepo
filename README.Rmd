@@ -25,7 +25,6 @@ library(tidyverse)
 library(pepo)
 ```
 
-<<<<<<< HEAD
 ## Quick example
 
 In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package). 
@@ -33,7 +32,6 @@ In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon
 ## Minimal example
 
 In this example, we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package). 
->>>>>>> origin/master
 
 ```{r, echo=TRUE}
 data("tomato")
@@ -60,11 +58,55 @@ That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For
 
 ```{r, error=FALSE, message=F, warning=F}
 library(ggtree)
-solgg <- to_treedata(tomato, tomato_hrf)
-
-ggtree(solgg, aes(color=hrf), size=2) + 
+solgg <- to_treedata(tomato, tomato_hrf%>%
+  mutate(cathrf = cut(hrf, breaks=c(0, 0.2, 0.5, 0.8, 1))))
+library(rcartocolor)
+solplot <- ggtree(solgg, aes(color=hrf), size=2) + 
   geom_tiplab(color='black') +
-  scale_color_gradient2(low = "darkblue", mid = "yellow", high="red", midpoint=1, na.value="grey80")+
+  scale_color_gradient2(limits=c(0,1), low='#008080', mid='#f6edbd', high='#ca562c', midpoint=0.5, na.value = 'grey90')+
   theme(legend.position = c(.05, .85))
+
+ggsave(solplot, filename = 'solplot.pdf', height=8, width=5)
+
 ```
+
+##Hemiplasy Risk in the Great Apes
+
+This is a quick calculation of the HRF on the phylogeny of Human-Chimpanzee-Gorilla.
+
+```{r, echo=TRUE}
+apetree <- ape::read.tree(text = "((((human,chimpanzee),gorilla),orangutan),out);")
+#nodevec <- c("human","chimpanzee", "gorilla", "orangutan", "hcg", "hc")
+#two_n_vec <- c(125, 45, 65, 10, 20, 21, 19, 50)*1000*2 #2Ne for each node
+two_n_vec <- c(125, 45, 65, 15, 15, 18, 19, 50)*1000*2
+pop_std_vec <- two_n_vec/two_n_vec[3] #relative to human 2Ne
+time_vec <- c(5, 6.5, 1.5, 4.1, 4.1, 5.5, 12, 15)*1000000 # times in MY
+length_vec <- time_vec/(20 * two_n_vec) # coalescent branch lengths: MY/(gen * 2Ne)
+apetree$edge.length <- length_vec
+plot(apetree); ape::edgelabels(prettyNum(length_vec, digits=2))
+
+```
+
+```{r, echo = TRUE}
+ape_hrf <- prep_branch_lengths(apetree)%>% tree_hrf(mutation =(2*10000*10^-8))
+ape_hrf
+```
+
+```{r, error=FALSE, message=F, warning=F}
+hc_hrf <- ape_hrf %>% filter(to==9)
+
+# the data here are from Kong et al 2012
+# numerators are sums of CpG and nonCpG mutations, from Table 2
+# the denominator 2*78*2.583e9 is the number of sites observed (effective bases times transmission events -- two times number of trios)
+
+cpg <- tibble(mu =c(1.2e-8, (2489 + 1516)/(2*78*2.583e9), (855+ 73)/(2*78*48.8e6)))%>%
+  mutate(nmu = 2*15000*mu)%>%
+  mutate(hc =  map_dbl(nmu, function(x) tree_hrf(hc_hrf, mutation = x, mode = 'strict', pepo=T)$hrf))
+cpg
+```
+
+```{r}
+single_hrf(this_branch = 0.1, descendants = c(1.21, 1.21), sibling = 1.22, ancestor = 1.43, mutation_rate = (2e6)*5.49e-9, model = "strict", pepo = T)
+```
+
 

@@ -27,19 +27,16 @@ NULL
 #'
 pr_hemiplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode= "standard") {
 
-    if (mode == "minimal") {
-      nomut_anc <- 1
-    } else {
-      nomut_anc <- 1 - pr_mutation(mu = mu_rate, t = branch_k3(t0 = 0, tm = anc, branch = "anc"))
-    }
+   treeb <- list(
+      anc = ifelse(mode == "minimal", 0, nu_k3_anc(t3 = anc, mu = mu_rate)),
+      a = nu_k3_short(t0 = desc_a + this, t3 = anc, mu = mu_rate),
+      b = nu_k3_long(t0 = desc_b + this, t3 = anc, mu = mu_rate),
+      c = nu_k3_short(t0 = sib, t3 = anc, mu = mu_rate),
+      ac = nu_k3_inter(t3 = anc, mu = mu_rate))
 
     pr_no_coal <- exp(-this)
-    mut_ac <- pr_mutation(mu = mu_rate, t = branch_k3(t0 = 0, tm = anc, branch = "inter"))
-    nomut_a <- 1 - pr_mutation(mu = mu_rate, t = branch_k3(t0 = desc_a + this, tm = anc, branch = "short"))
-    nomut_c <- 1 - pr_mutation(mu = mu_rate, t = branch_k3(t0 = sib, tm = anc, branch = "short"))
-    nomut_b <- 1 - pr_mutation(mu = mu_rate, t = branch_k3(t0 = desc_b + this, tm = anc, branch = "long"))
 
-    (1/3) * pr_no_coal * mut_ac * nomut_a * nomut_c * nomut_b * nomut_anc
+    (1/3) * pr_no_coal * treeb$ac * (1-treeb$a) * (1-treeb$c) * (1-treeb$b) * (1-treeb$anc)
 }
 
 #' Probability of incongruence due to homoplasy in a three-species clade.
@@ -68,10 +65,16 @@ pr_homoplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standa
     mu_noco <- homoplasy_mutations(this, desc_a, desc_b, sib, anc, mu_rate, coal = F, mode)
     mu_coal <- homoplasy_mutations(this, desc_a, desc_b, sib, anc, mu_rate, coal = T, mode)
 
-    hit_ac <- pr_coal * pr_double_hit(mu_coal, "ac") + (1 - pr_coal) * pr_double_hit(mu_noco, "ac")
+    hit_ac <- pr_coal * pr_double_hit(mu_coal, "ac") +
+      (1 - pr_coal) * ((1/3)*pr_double_hit(mu_noco$alpha, "ac") +
+                       (1/3)*pr_double_hit(mu_noco$beta, "ac") +
+                       (1/3)*pr_double_hit(mu_noco$gamma, "ac"))
 
     if (mode != "minimal") {
-        hit_banc <- pr_coal * pr_double_hit(mu_coal, "banc") + (1 - pr_coal) * pr_double_hit(mu_noco, "banc")
+        hit_banc <- pr_coal * pr_double_hit(mu_coal, "banc") +
+          (1 - pr_coal) * ((1/3)*pr_double_hit(mu_noco$alpha, "banc") +
+                           (1/3)*pr_double_hit(mu_noco$beta, "banc") +
+                           (1/3)*pr_double_hit(mu_noco$gamma, "banc"))
         return(hit_ac + hit_banc)
     } else {
         return(hit_ac)
@@ -101,7 +104,7 @@ pr_homoplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standa
 #'
 #' @return Numeric, a ratio
 #' @seealso \code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{tree_hrf}}
-single_hrf <- function(this_branch, descendants, ancestor, sibling, mutation_rate, model = "standard") {
+single_hrf <- function(this_branch, descendants, ancestor, sibling, mutation_rate, model = "standard", pepo=F) {
     if (length(descendants) != 2) return(NA) # this branch doesn't have two descendants, HRF can't be computed
     if (is.na(this_branch)) return(NA) # this branch doesn't have a positive length. Happens at root. No HRF calculated.
     if (is.na(ancestor)) ancestor <- Inf # if ancestral branch is undefined, it is assumed to be infinite (ancestor may be root).
@@ -120,6 +123,7 @@ single_hrf <- function(this_branch, descendants, ancestor, sibling, mutation_rat
     po_a <- pr_homoplasy(this = this_branch, desc_a = a, desc_b = b, sib = sibling, anc = ancestor, mu_rate = mutation_rate, mode = model)
     po_b <- pr_homoplasy(this = this_branch, desc_a = b, desc_b = a, sib = sibling, anc = ancestor, mu_rate = mutation_rate, mode = model)
     po <- po_a + po_b
+    if(pepo)    return(pe_a/po_a)
 
-    return(pe/po)
+    return(pe/(pe+po))
 }

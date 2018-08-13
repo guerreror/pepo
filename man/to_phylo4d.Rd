@@ -2,7 +2,7 @@
 % Please edit documentation in R/hrf_on_trees.R
 \name{to_phylo4d}
 \alias{to_phylo4d}
-\title{Convert to 'phylo4d' class}
+\title{Convert to 'phylo4' class}
 \usage{
 to_phylo4d(tree, df)
 }
@@ -15,5 +15,5 @@ to_phylo4d(tree, df)
 an object of class phylo4
 }
 \description{
-Convert to 'phylo4d' class
+Convert to 'phylo4' class
 }

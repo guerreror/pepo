@@ -4,7 +4,7 @@
 \alias{branch_k3}
 \title{Calculate branch lengths in genealogy that involves ILS}
 \usage{
-branch_k3(t0 = 0, tm = Inf, branch = "avg")
+branch_k3(t0 = 0, tm = Inf, branch)
 }
 \arguments{
 \item{t0}{Numeric. Time at start of coalescent process (i.e., constant length to be added to terminal branches; in coal units)}

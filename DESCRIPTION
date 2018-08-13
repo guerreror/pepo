@@ -1,7 +1,7 @@
 Package: pepo
 Type: Package
 Title: Estimate Hemiplasy and Homoplasy on a Phylogeny
-Version: 0.1.1
+Version: 0.2
 Author: Rafael Guerrero
 Maintainer: Rafael Guerrero <rafguerr@indiana.edu>
 Description: P(e):P(o) is a minimal package that implements methods to calculate 
@@ -31,6 +31,6 @@ Collate:
     'mutation_functions.R'
     'hrf_functions.R'
     'hrf_on_trees.R'
-    'mini_utilities.R'
     'pepo.R'
+    'pepo_utilities.R'
 VignetteBuilder: knitr
