@@ -14,7 +14,6 @@ This is the alpha release of `pepo`, an R package to calculate the hemiplasy ris
 Install `pepo` from github with: `devtools::install_github("guerreror/pepo")`.
 
 ```{r, warning=FALSE, error=FALSE, message=FALSE}
-library(tidyverse)
 library(pepo)
 ```
 

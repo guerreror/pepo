@@ -105,8 +105,3 @@ cpg <- tibble(mu =c(1.2e-8, (2489 + 1516)/(2*78*2.583e9), (855+ 73)/(2*78*48.8e6
 cpg
 ```
 
-```{r}
-single_hrf(this_branch = 0.1, descendants = c(1.21, 1.21), sibling = 1.22, ancestor = 1.43, mutation_rate = (2e6)*5.49e-9, model = "strict", pepo = T)
-```
-
-
