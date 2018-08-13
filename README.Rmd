@@ -21,13 +21,13 @@ This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of th
 Install `pepo` from github with: `devtools::install_github("guerreror/pepo")`.
 
 ```{r, warning=FALSE, error=FALSE, message=FALSE}
-library(tidyverse)
 library(pepo)
 ```
 
 ## Quick example
 
 In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package). 
+
 =======
 ## Minimal example
 
@@ -60,14 +60,11 @@ That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For
 library(ggtree)
 solgg <- to_treedata(tomato, tomato_hrf%>%
   mutate(cathrf = cut(hrf, breaks=c(0, 0.2, 0.5, 0.8, 1))))
-library(rcartocolor)
-solplot <- ggtree(solgg, aes(color=hrf), size=2) + 
+
+ggtree(solgg, aes(color=hrf), size=2) + 
   geom_tiplab(color='black') +
   scale_color_gradient2(limits=c(0,1), low='#008080', mid='#f6edbd', high='#ca562c', midpoint=0.5, na.value = 'grey90')+
   theme(legend.position = c(.05, .85))
-
-ggsave(solplot, filename = 'solplot.pdf', height=8, width=5)
-
 ```
 
 ##Hemiplasy Risk in the Great Apes

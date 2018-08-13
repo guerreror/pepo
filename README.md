@@ -13,7 +13,6 @@ This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of th
 Install `pepo` from github with: `devtools::install_github("guerreror/pepo")`.
 
 ``` r
-library(tidyverse)
 library(pepo)
 ```
 
@@ -21,10 +20,8 @@ Quick example
 -------------
 
 In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
-========================================================================================================================================================================
 
-Minimal example
----------------
+======= \#\# Minimal example
 
 In this example, we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
 
@@ -59,14 +56,6 @@ Then we can call `tree_hrf()` on that tibble. The function will return the origi
 
 ``` r
 tomato_hrf <- tree_hrf(tomato_branches)
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
 tomato_hrf
 #> # A tibble: 36 x 8
 #>    code   from    to this_branch descendants ancestor sibling      hrf
@@ -92,14 +81,14 @@ That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For
 library(ggtree)
 solgg <- to_treedata(tomato, tomato_hrf%>%
   mutate(cathrf = cut(hrf, breaks=c(0, 0.2, 0.5, 0.8, 1))))
-library(rcartocolor)
-solplot <- ggtree(solgg, aes(color=hrf), size=2) + 
+
+ggtree(solgg, aes(color=hrf), size=2) + 
   geom_tiplab(color='black') +
   scale_color_gradient2(limits=c(0,1), low='#008080', mid='#f6edbd', high='#ca562c', midpoint=0.5, na.value = 'grey90')+
   theme(legend.position = c(.05, .85))
-
-ggsave(solplot, filename = 'solplot.pdf', height=8, width=5)
 ```
+
+![](README-unnamed-chunk-6-1.png)
 
 Hemiplasy Risk in the Great Apes
 --------------------------------
@@ -122,10 +111,6 @@ plot(apetree); ape::edgelabels(prettyNum(length_vec, digits=2))
 
 ``` r
 ape_hrf <- prep_branch_lengths(apetree)%>% tree_hrf(mutation =(2*10000*10^-8))
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
-#> [1] "In pr_double_hit(): Returning NaN."
 ape_hrf
 #> # A tibble: 8 x 8
 #>   code   from    to this_branch descendants ancestor sibling     hrf

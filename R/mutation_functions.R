@@ -84,9 +84,6 @@ pr_double_hit <- function(mu_list, where) {
   if(!where%in%where.avail) stop("In pr_double_hit(): Parameter value for 'where' not recognized")
   if (where == "ac") out <-  mu_list$a * mu_list$c * (1 - mu_list$anc) * (1 - mu_list$b) * (1 - mu_list$ab)
   if (where == "banc") out <- mu_list$b * mu_list$anc * (1 - mu_list$a) * (1 - mu_list$c) * (1 - mu_list$ab)
-  if (is.na(out)) {
-    print("In pr_double_hit(): Returning NaN.")
-}
   return(out)
 }
 
