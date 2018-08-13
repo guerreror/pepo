@@ -21,10 +21,6 @@ Quick example
 
 In this example we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
 
-======= \#\# Minimal example
-
-In this example, we start with a preloaded phylogeny of Solanum sect Lycopersicon from Pease et al (2016). The tree is already of class `phylo` (from the 'ape' package).
-
 ``` r
 data("tomato")
 class(tomato)
