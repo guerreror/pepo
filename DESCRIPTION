@@ -12,6 +12,7 @@ Description: P(e):P(o) implements methods to calculate the probabilities of hemi
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+BiocViews:
 Imports:
     readr,
     purrr,
@@ -22,9 +23,8 @@ Suggests:
     ggplot2,
     testthat,
     knitr,
-    rmarkdown
-Remotes:
-    bioc::3.5/release/treeio
+    rmarkdown,
+    treeio
 RoxygenNote: 6.1.0
 Collate:
     'data.R'
