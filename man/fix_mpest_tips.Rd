@@ -13,6 +13,9 @@ fix_mpest_tips(branches, is_tip, newval)
 
 \item{newval}{numeric or class 'phylo'}
 }
+\value{
+a numeric vector
+}
 \description{
 Because estimating branch length at tips (terminal lineages) is
   impossible for coalescent methods, some implementations (like MP-EST)

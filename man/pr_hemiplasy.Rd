@@ -35,5 +35,5 @@ on other branches of the tree).
 See documentation of tree_hrf() for description of the three models implemented.
 }
 \seealso{
-\code{\link{pr_homoplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
+\code{\link{pr_homoplasy}}, \code{\link{calc_hrf}}, \code{\link{tree_hrf}}
 }

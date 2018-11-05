@@ -23,7 +23,7 @@ NULL
 #' @param mode String. One of the three models implemented: "standard" (default), "minimal", or "strict".
 #'
 #' @return Numeric, a probability
-#' @seealso \code{\link{pr_homoplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
+#' @seealso \code{\link{pr_homoplasy}}, \code{\link{calc_hrf}}, \code{\link{tree_hrf}}
 #'
 pr_hemiplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode= "standard") {
 
@@ -55,7 +55,7 @@ pr_hemiplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode= "standar
 #' @inheritParams pr_hemiplasy
 #'
 #' @return Numeric, a probability
-#' @seealso \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
+#' @seealso \code{\link{pr_hemiplasy}}, \code{\link{calc_hrf}}, \code{\link{tree_hrf}}
 #'
 pr_homoplasy <- function(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standard") {
     pr_coal <- 1 - exp(-this)

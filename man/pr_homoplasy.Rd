@@ -36,5 +36,5 @@ in other branches) or --depending on \code{mode}- mutations along the ABC ancest
 See documentation of tree_hrf() for description of the three models implemented.
 }
 \seealso{
-\code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}, \code{\link{tree_hrf}}
+\code{\link{pr_hemiplasy}}, \code{\link{calc_hrf}}, \code{\link{tree_hrf}}
 }

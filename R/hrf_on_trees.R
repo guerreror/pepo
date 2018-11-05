@@ -36,10 +36,8 @@ branch_length_correlation <- function(mpest_branches, concate_branches){
 #' @param is_tip logical vector
 #' @param newval numeric or class 'phylo'
 #'
-#' @return
-#' @export
+#' @return a numeric vector
 #'
-#' @examples
 fix_mpest_tips <- function(branches, is_tip, newval){
   if(is.null(newval)) return(branches)
 
@@ -79,7 +77,6 @@ inverse_cf <- function(vec){
 #' @return numeric vector of estimated branches
 #' @export
 #'
-#' @examples
 convert_from_cf <- function(tree, concordance_factors){
 
   if(is.numeric(concordance_factors)){
