@@ -4,11 +4,11 @@ Title: Estimate Hemiplasy and Homoplasy on a Phylogeny
 Version: 0.2
 Author: Rafael Guerrero
 Maintainer: Rafael Guerrero <rafguerr@indiana.edu>
-Description: P(e):P(o) is a minimal package that implements methods to calculate 
-    the probabilities of hemiplasy (trait evolution incongruent with species tree due to incomplete
-    lineage sorting) and homoplasy (incongruent traits due to convergent mutations). In this first version, the
-    package includes functions to estimate and plot the ratio of these two probabilities--the Hemiplasy Risk Factor (HRF)-- of all branches on a phylogeny, 
-    provided a tree is in coalescent units and a mutation rate.
+Description: P(e):P(o) implements methods to calculate the probabilities of hemiplasy 
+    (trait evolution incongruent with species tree due to incomplete
+    lineage sorting) and homoplasy (incongruent traits due to convergent mutations). In this version, the
+    package includes functions to estimate and plot the relative fraction of incongruency due to 
+    hemiplasy--the Hemiplasy Risk Factor (HRF)-- of all branches on a phylogeny, provided a tree is in coalescent units.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -25,7 +25,7 @@ Suggests:
     rmarkdown
 Remotes:
     bioc::3.5/release/treeio
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Collate:
     'data.R'
     'mutation_functions.R'

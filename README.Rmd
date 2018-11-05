@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 ```
 
 #The P(e):P(o) package
-This is the alpha release of `pepo`, a minimal package to calculate the probabilities of hemiplasy (trait evolution incongruent with species tree due to incomplete lineage sorting) and homoplasy (incongruent traits due to convergent mutations). Currently, the package includes functions to estimate the ratio of these two probabilities, which we call the Hemiplasy Risk Factor (HRF), for all branches on a phylogeny. Provided a tree, branch lengths and population-wide mutation rate in coalescent units (2N), the HRF will give an intuition for the relative importance of hemiplasy in the evolution of a particular clade.
+This is the beta release of `pepo`, a minimal package to calculate the probabilities of hemiplasy (trait evolution incongruent with species tree due to incomplete lineage sorting) and homoplasy (incongruent traits due to convergent mutations). Currently, the package includes functions to estimate the fraction of incongruency expected to be due to hemiplasy, which we call the Hemiplasy Risk Factor (HRF), for all branches on a phylogeny. Provided a tree, branch lengths and population-wide mutation rate in coalescent units (2N), the HRF will give an intuition for the relative importance of hemiplasy in the evolution of a particular clade.
 
 ## Installation
 This package depends on `ape`, `dplyr`, and `purrr`. The last two are part of the `tidyverse`. 
@@ -22,6 +22,7 @@ Install `pepo` from github with: `devtools::install_github("guerreror/pepo")`.
 
 ```{r, warning=FALSE, error=FALSE, message=FALSE}
 library(pepo)
+library(tidyverse)
 ```
 
 ## Quick example
@@ -51,7 +52,7 @@ Some `NA` values in the `hrf` column are normal: the function does not calculate
 
 That's it. Now we can explore/plot the HRF of all branches in the phylogeny. For example, we can use the `ggtree` package to plot the tree. The `to_treedata()` function converts our HRF tibble and `phylo` tree into a `ggtree`-compatible object (which allows for easy plotting).
 
-```{r, error=FALSE, message=F, warning=F}
+```{r tomatotree, error=FALSE, message=F, warning=F}
 library(ggtree)
 solgg <- to_treedata(tomato, tomato_hrf%>%
   mutate(cathrf = cut(hrf, breaks=c(0, 0.2, 0.5, 0.8, 1))))
@@ -68,23 +69,21 @@ This is a quick calculation of the HRF on the phylogeny of Human-Chimpanzee-Gori
 
 ```{r, echo=TRUE}
 apetree <- ape::read.tree(text = "((((human,chimpanzee),gorilla),orangutan),out);")
-#nodevec <- c("human","chimpanzee", "gorilla", "orangutan", "hcg", "hc")
-#two_n_vec <- c(125, 45, 65, 10, 20, 21, 19, 50)*1000*2 #2Ne for each node
+
 two_n_vec <- c(125, 45, 65, 15, 15, 18, 19, 50)*1000*2
 pop_std_vec <- two_n_vec/two_n_vec[3] #relative to human 2Ne
 time_vec <- c(5, 6.5, 1.5, 4.1, 4.1, 5.5, 12, 15)*1000000 # times in MY
 length_vec <- time_vec/(20 * two_n_vec) # coalescent branch lengths: MY/(gen * 2Ne)
 apetree$edge.length <- length_vec
-plot(apetree); ape::edgelabels(prettyNum(length_vec, digits=2))
 
-```
+ape_hrf <- prep_branch_lengths(apetree)%>%
+  tree_hrf(mutation =2*15000*(1.2e-8)/3)
 
-```{r, echo = TRUE}
-ape_hrf <- prep_branch_lengths(apetree)%>% tree_hrf(mutation =(2*10000*10^-8))
 ape_hrf
 ```
 
-```{r, error=FALSE, message=F, warning=F}
+
+```{r, include=FALSE, eval = FALSE, error=FALSE, message=F, warning=F}
 hc_hrf <- ape_hrf %>% filter(to==9)
 
 # the data here are from Kong et al 2012
@@ -93,7 +92,7 @@ hc_hrf <- ape_hrf %>% filter(to==9)
 
 cpg <- tibble(mu =c(1.2e-8, (2489 + 1516)/(2*78*2.583e9), (855+ 73)/(2*78*48.8e6)))%>%
   mutate(nmu = 2*15000*mu)%>%
-  mutate(hc =  map_dbl(nmu, function(x) tree_hrf(hc_hrf, mutation = x, mode = 'strict', pepo=T)$hrf))
+  mutate(hc =  map_dbl(nmu, function(x) tree_hrf(hc_hrf, mutation = x/3, mode = 'strict')$hrf))
 cpg
 ```
 

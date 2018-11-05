@@ -15,7 +15,7 @@ pr_hemiplasy(this, desc_a, desc_b, sib, anc, mu_rate, mode = "standard")
 
 \item{anc}{Length of ancestral branch (the ABC ancestor)}
 
-\item{mu_rate}{Population-wide mutation rate}
+\item{mu_rate}{Numeric of length 2. Population-wide mutation rate (forward, reverse)}
 
 \item{mode}{String. One of the three models implemented: "standard" (default), "minimal", or "strict".}
 }
@@ -24,12 +24,12 @@ Numeric, a probability
 }
 \description{
 It assumes:
-no uncertainty on species tree ((A,B),C), one sample per species, observed states of
+no uncertainty on species tree (A,(B,C)), one sample per species, observed states of
 binary trait were a=1, b=0, and c=1, branch lengths in coalescent units.
 
 Roughly, it computes the product of the probabilities of events necessary for the observed
 incongruence. Specifically, the probability of samples a and c coalescing (which includes incomplete
-lineage sorting in the internal AB branch), and one mutation on the ac branch (which implies no mutations
+lineage sorting in the internal BC branch), and one mutation on the ac branch (which implies no mutations
 on other branches of the tree).
 
 See documentation of tree_hrf() for description of the three models implemented.

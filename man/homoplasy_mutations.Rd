@@ -4,7 +4,8 @@
 \alias{homoplasy_mutations}
 \title{Get probabilities of mutation along all branches}
 \usage{
-homoplasy_mutations(this, desc_a, desc_b, sib, anc, mu_rate, coal = T, mode)
+homoplasy_mutations(this, desc_a, desc_b, sib, anc, mu_rate, coal = T,
+  mode)
 }
 \arguments{
 \item{this}{Numeric. Branch length of focal internal branch.}
@@ -17,9 +18,9 @@ homoplasy_mutations(this, desc_a, desc_b, sib, anc, mu_rate, coal = T, mode)
 
 \item{anc}{Length of ancestral branch (the ABC ancestor)}
 
-\item{mu_rate}{Population-wide mutation rate}
+\item{mu_rate}{Numeric of length 2. Population-wide mutation rate (forward, reverse)}
 
-\item{coal}{logical. Did coalescence in the AB ancestor happen?}
+\item{coal}{logical. Did coalescence in the BC ancestor happen?}
 
 \item{mode}{String. One of the three models implemented: "standard" (default), "minimal", or "strict".}
 }

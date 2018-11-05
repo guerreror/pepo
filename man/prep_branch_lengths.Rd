@@ -4,13 +4,16 @@
 \alias{prep_branch_lengths}
 \title{Prepare branches for HRF calculation}
 \usage{
-prep_branch_lengths(tree, tip_replace = NULL)
+prep_branch_lengths(tree, tip_replace = NULL,
+  concordance_factors = NULL)
 }
 \arguments{
 \item{tree}{a phylogeny of class 'phylo'}
 
-\item{tip_replace}{NULL(default), numeric of length 1, numeric vector of length equal to number of tips,
+\item{tip_replace}{NULL(default), numeric of length 1, or numeric vector of length equal to number of tips,
 or object of class 'phylo'.}
+
+\item{concordance_factors}{NULL(default), character, numeric vector of length equal to number of branches in tree}
 }
 \value{
 a tibble
@@ -37,4 +40,10 @@ Take a 'phylo' object and extract the relevant branches for each
   the 'tip_replace' phylogeny are in the same order as in 'tree'. While not
   mandatory, it is strongly recommended that the topologies of the two trees
   are the identical.
+
+  If 'concordance_factors' is not NULL, it'll modify branch lengths using
+  concordance factors. If 'concordance_factors' is a character, it'll be taken as the
+  name of the variable in the data frame that corresponds to the concordance factors. If it's
+  a numeric vector, it'll be taken as the values of concordance factors (in the same order as
+  the corresponding branches in the data frame).
 }

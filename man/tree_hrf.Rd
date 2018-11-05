@@ -4,22 +4,33 @@
 \alias{tree_hrf}
 \title{Calculate HRF for all branches on a tree}
 \usage{
-tree_hrf(edges, mutation = 0.01, mode = "standard", pepo = F)
+tree_hrf(edges, mutation = 0.01, mode = "standard")
 }
 \arguments{
-\item{edges}{a tbl (or data_frame)}
+\item{edges}{a tibble (or data_frame)}
 
-\item{mutation}{numeric, population-wide mutation rate}
+\item{mutation}{numeric (forward, reverse population-wide mutation rate)}
 
-\item{mode}{string}
+\item{mode}{character}
 }
 \value{
 a tibble
 }
 \description{
 It assumes:
-no uncertainty on species tree ((A,B),C), one sample per species, branch lengths in coalescent units.
+no uncertainty on species tree (A,(B,C)), one sample per species, branch lengths in coalescent units.
+
+If 'mutation' is a numeric of length 1, forward (0->1) and reverse (1->0) mutation rates are the same. If
+it's of length 2, the first element is the forward- and the second is the reverse mutation rate.
+
+'mode' can be one of three:
+'minimal' -- Reversals are not allowed. Ancestral (ABC) time is assumed to be infinite.
+'standard' -- Reversals allowed. Ancestral (ABC) time is assumed to be at least 4. This is equivalent to assuming that
+coalescence in the ABC ancestor is very likely (most coalescence happens before this time).
+'strict' -- Reversals allowed. No changes to ABC time. If this time is very short, probabilities of reversals
+and of hemiplasy are affected. The ABC branch (where the first 0->1 would happen in a reversal scenario) and the
+AC branch (where the only 0->1 happens in hemiplasy) are very short, lowering the probability of events on them.
 }
 \seealso{
-\code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}
+\code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{calc_hrf}}
 }

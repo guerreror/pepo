@@ -21,7 +21,7 @@ branch_length_correlation <- function(mpest_branches, concate_branches){
   return(c(slope,intercept))
 }
 
-#' Change values of branch lenghts at tips
+#' Change values of branch lengths at tips
 #'
 #' @description Because estimating branch length at tips (terminal lineages) is
 #'   impossible for coalescent methods, some implementations (like MP-EST)
@@ -32,7 +32,7 @@ branch_length_correlation <- function(mpest_branches, concate_branches){
 #'   number of tips, or a phylogeny (object class 'phylo') with branch lengths
 #'   in substitution rate (will be used to extrapolate coalescent branch length)
 #'
-#' @param branches vector of coalescent
+#' @param branches numeric vector
 #' @param is_tip logical vector
 #' @param newval numeric or class 'phylo'
 #'
@@ -58,6 +58,47 @@ fix_mpest_tips <- function(branches, is_tip, newval){
   return(branches)
 }
 
+inverse_cf <- function(vec){
+  epsilon <- 1e-4
+  y <- -log((3/2)*(1-vec))
+  ifelse(y < 0, epsilon, y)
+}
+
+#' Use concordance factors as approximate branch lengths
+#'
+#' @description Under the assumption that all gene tree discordance is due to
+#' incomplete lineage sorting, this function estimates length for internal branches of a tree
+#' by taking the proportion of discordant trees (i.e. 1 minus the concordance factor)
+#' and solving for branch length t = -ln(3⁄2* (1-CF)).
+#' It will return 0 for CF < 1/3, and
+#' Infinite for CF == 1 (which isn't realistic but essentially eliminates the possibility of hemiplasy)
+#'
+#' @param tree a phylogeny of class 'phylo'
+#' @param concordance_factors string or numeric vector of length equal to number of branches in tree
+#'
+#' @return numeric vector of estimated branches
+#' @export
+#'
+#' @examples
+convert_from_cf <- function(tree, concordance_factors){
+
+  if(is.numeric(concordance_factors)){
+    l <- length(concordance_factors)
+    t <- length(tree$edge.length)
+    if( l != 1 & l != t) {warning(paste("Replacement object for concordance factors expected to be length 1 or", t, "\n", sep=" "))}
+    branches <- inverse_cf( concordance_factors )
+  }
+  else if(is.character(concordance_factors)){
+    branches <- inverse_cf( with(tree, concordance_factors))
+  }
+  else { warning("Class of object for Concordance Factor transformation not recognized.")}
+
+  if(sum(is.infinite(branches))> 0){warning("At least one branch length inferred from concordance factors is infinite.")}
+
+  return(branches)
+}
+
+
 #' Prepare branches for HRF calculation
 #' @description Take a 'phylo' object and extract the relevant branches for each
 #'   HRF calculation.
@@ -81,14 +122,22 @@ fix_mpest_tips <- function(branches, is_tip, newval){
 #'   mandatory, it is strongly recommended that the topologies of the two trees
 #'   are the identical.
 #'
+#'   If 'concordance_factors' is not NULL, it'll modify branch lengths using
+#'   concordance factors. If 'concordance_factors' is a character, it'll be taken as the
+#'   name of the variable in the data frame that corresponds to the concordance factors. If it's
+#'   a numeric vector, it'll be taken as the values of concordance factors (in the same order as
+#'   the corresponding branches in the data frame).
+#'
+#'
 #' @param tree a phylogeny of class 'phylo'
-#' @param tip_replace NULL(default), numeric of length 1, numeric vector of length equal to number of tips,
+#' @param tip_replace NULL(default), numeric of length 1, or numeric vector of length equal to number of tips,
 #' or object of class 'phylo'.
+#' @param concordance_factors NULL(default), character, numeric vector of length equal to number of branches in tree
 #'
 #' @return a tibble
 #' @export
 #'
-prep_branch_lengths <- function(tree, tip_replace = NULL) {
+prep_branch_lengths <- function(tree, tip_replace = NULL, concordance_factors = NULL) {
   if (!is(tree, 'phylo')) {
     warning("'tree' is not of class 'phylo', prep_branch_lengths() might give bad results.")
   }
@@ -103,6 +152,10 @@ prep_branch_lengths <- function(tree, tip_replace = NULL) {
 
   is_tip <-  sapply(skeleton$descend, length) == 0
   branches <- fix_mpest_tips(tree$edge.length, is_tip, tip_replace)
+
+  if(!is.null(concordance_factors)){
+    branches <- convert_from_cf(tree, concordance_factors)
+  }
 
   edges_df <- dplyr::transmute(skeleton,
                                code,
@@ -120,26 +173,40 @@ prep_branch_lengths <- function(tree, tip_replace = NULL) {
 #'
 #' @description
 #' It assumes:
-#' no uncertainty on species tree ((A,B),C), one sample per species, branch lengths in coalescent units.
+#' no uncertainty on species tree (A,(B,C)), one sample per species, branch lengths in coalescent units.
+#'
+#' If 'mutation' is a numeric of length 1, forward (0->1) and reverse (1->0) mutation rates are the same. If
+#' it's of length 2, the first element is the forward- and the second is the reverse mutation rate.
+#'
+#' 'mode' can be one of three:
+#' 'minimal' -- Reversals are not allowed. Ancestral (ABC) time is assumed to be infinite.
+#' 'standard' -- Reversals allowed. Ancestral (ABC) time is assumed to be at least 4. This is equivalent to assuming that
+#' coalescence in the ABC ancestor is very likely (most coalescence happens before this time).
+#' 'strict' -- Reversals allowed. No changes to ABC time. If this time is very short, probabilities of reversals
+#' and of hemiplasy are affected. The ABC branch (where the first 0->1 would happen in a reversal scenario) and the
+#' AC branch (where the only 0->1 happens in hemiplasy) are very short, lowering the probability of events on them.
 #'
 #'
-#' @param edges a tbl (or data_frame)
-#' @param mutation numeric, population-wide mutation rate
-#' @param mode string
+#'
+#' @param edges a tibble (or data_frame)
+#' @param mutation numeric (forward, reverse population-wide mutation rate)
+#' @param mode character
 #'
 #' @return a tibble
 #' @export
-#' @seealso \code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{single_hrf}}
+#' @seealso \code{\link{pr_homoplasy}}, \code{\link{pr_hemiplasy}}, \code{\link{calc_hrf}}
 #'
-tree_hrf <- function(edges, mutation = 0.01, mode = "standard", pepo=F) {
+tree_hrf <- function(edges, mutation = 0.01, mode = "standard") {
   model_avail <- c("standard", "minimal", "strict")
   if(!mode %in% model_avail) warning(paste("Requested model", mode,"in tree_hrf() not recognized."))
 
   if(is.null(edges$this_branch) | is.null(edges$descendants) | is.null(edges$ancestor) | is.null(edges$sibling)){
     warning("At least one variable is missing in the 'edges' data frame. You might need to run prep_branch_lengths() first.")
   }
-  dplyr::mutate(edges,
-                hrf = purrr::pmap_dbl(list(this_branch, descendants, ancestor, sibling), single_hrf, mutation_rate = mutation, model = mode, pepo=pepo))
+ return(
+      dplyr::mutate(edges,
+                    hrf = purrr::pmap_dbl(list(this_branch, descendants, ancestor, sibling), calc_hrf, mutation_rate = mutation, model = mode))
+    )
 }
 
 #' Convert to 'treedata'

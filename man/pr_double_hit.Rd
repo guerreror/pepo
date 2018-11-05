@@ -7,7 +7,7 @@
 pr_double_hit(mu_list, where)
 }
 \arguments{
-\item{mu_list}{List with "anc", "a", "b", "c", and "ab" entries, each of which is a mutation probability.}
+\item{mu_list}{List with "anc", "a", "b", "c", and "bc" entries, each of which is a mutation probability.}
 
 \item{where}{String. "ac" or "banc".}
 }

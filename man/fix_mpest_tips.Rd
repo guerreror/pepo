@@ -2,12 +2,12 @@
 % Please edit documentation in R/hrf_on_trees.R
 \name{fix_mpest_tips}
 \alias{fix_mpest_tips}
-\title{Change values of branch lenghts at tips}
+\title{Change values of branch lengths at tips}
 \usage{
 fix_mpest_tips(branches, is_tip, newval)
 }
 \arguments{
-\item{branches}{vector of coalescent}
+\item{branches}{numeric vector}
 
 \item{is_tip}{logical vector}
 
